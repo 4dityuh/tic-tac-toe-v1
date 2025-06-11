@@ -14,11 +14,12 @@ console.log("Made with love by Farrel <3 \n");
         
         */
 
-
 /*
 TODO :
 - Fix the bugs
 - Add some more logical operators that prevent users from crashing the game
+- Let user won't go beyond the 3x3 grid
+- Let user prevent from stacking each tic
 
 */
 let matrices = [
@@ -76,32 +77,54 @@ let win = function (arr) {
   return flag;
 };
 
-while (win(matrices) != true) {
+while (true) {
   console.log("Player 1 :");
-  let posX1 = prompt("Enter your position (row): ");
-  let posY1 = prompt("Enter your position (column): ");
-  parseInt(posX1);
-  parseInt(posY1);
+  let posX1 = prompt("Enter your position (row): "),
+    posY1 = prompt("Enter your position (column): "),
+    x1 = parseInt(posX1),
+    y1 = parseInt(posY1);
 
-  matrices[posX1 - 1][posY1 - 1] = "X";
+  while ((x1 <= 0 || x1 > 3 || isNaN(x1)) || (y1 <= 0 || y1 > 3 || isNaN(y1)) ) {
+    console.log("You can't go beyond 3x3! \n");
+    (posX1 = prompt("Enter your position (row): ")),
+      (posY1 = prompt("Enter your position (column): ")),
+      (x1 = parseInt(posX1)),
+      (y1 = parseInt(posY1));
+  }
+  if (x1 <= 3 && y1 <= 3) {
+    matrices[x1 - 1][y1 - 1] = "X";
+  }
 
   for (let i = 0; i < matrices.length; i++) {
     console.log(matrices[i]);
     console.log("\n");
   }
+
+  if (win(matrices)) break;
 
   console.log("Player 2 :");
-  let posX2 = prompt("Enter your position (row): ");
-  let posY2 = prompt("Enter your position (column): ");
-  parseInt(posX2);
-  parseInt(posY2);
+  let posX2 = prompt("Enter your position (row): "),
+    posY2 = prompt("Enter your position (column): "),
+    x2 = parseInt(posX2),
+    y2 = parseInt(posY2);
 
-  matrices[posX2 - 1][posY2 - 1] = "O";
+  while ((x2 <= 0 || x2 > 3 || isNaN(x2)) || (y2 <= 0 || y2 > 3 || isNaN(y2))) {
+    console.log("You can't go beyond 3x3! \n");
+    (posX2 = prompt("Enter your position (row): ")),
+      (posY2 = prompt("Enter your position (column): ")),
+      (x2 = parseInt(posX2)),
+      (y2 = parseInt(posY2));
+  }
+  if (x2 <= 3 && y2 <= 3) {
+    matrices[x2 - 1][y2 - 1] = "Y";
+  }
 
   for (let i = 0; i < matrices.length; i++) {
     console.log(matrices[i]);
     console.log("\n");
   }
+
+  if (win(matrices)) break;
 }
 
 if (win(matrices)) console.log("cihuy");
