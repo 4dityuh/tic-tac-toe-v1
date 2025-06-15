@@ -1,0 +1,1 @@
+console.log(sortedSquares([-100, -13, -4, -1, 0, 3, 10, 12]));

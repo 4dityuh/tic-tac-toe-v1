@@ -7,124 +7,143 @@ console.log("Made with love by Farrel <3 \n");
 // [[x,x,x]]
 // [[x,x,x]]
 
-/*
- if(arr[i][0] == arr[i][1] && 
-        arr[i][0] == arr[i][2] && 
-        arr[i][1] == arr[i][2]) flag = true;
-        
-        */
+// TODO :
+// - Fix the bugs : DONE
+// - Add some more logical operators that prevent users from crashing the game : DONE
+// - Let user won't go beyond the 3x3 grid : DONE
+// - Let user prevent from stacking each tic : DONE
+// - Automate so that maybe the win function can work not only for 3x3 grid : WIP
 
-/*
-TODO :
-- Fix the bugs
-- Add some more logical operators that prevent users from crashing the game
-- Let user won't go beyond the 3x3 grid
-- Let user prevent from stacking each tic
-
-*/
 let matrices = [
   [1, 2, 3],
   [4, 3, 6],
   [7, 8, 9],
 ];
 
+let isBeyond = function (x, y) {
+  return x <= -1 || x > 3 || isNaN(x) || y <= -1 || y > 3 || isNaN(y);
+};
+
+let isNotAvaliable = function (x, y) {
+  return matrices[x - 1][y - 1] == "X" || matrices[x - 1][y - 1] == "O";
+};
+
 let win = function (arr) {
-  let flag = false;
   for (let i = 0; i < arr.length; i++) {
-    if (
-      arr[i][0] == arr[i][1] &&
-      arr[i][0] == arr[i][2] &&
-      arr[i][1] == arr[i][2]
-    ) {
-      flag = true;
-      break;
+    for (let j = 1; j < arr[i].length; j++) {
+      if (
+        arr[i][j - 1] == arr[i][j] &&
+        arr[i][j - 1] == arr[i][j + 1] &&
+        arr[i][j] == arr[i][j + 1]
+      ) {
+        return true;
+      }
     }
   }
 
-  for (let i = 1; i < arr.length / 2; i++) {
+  for (let i = 1; i < arr.length; i++) {
     for (let j = 0; j < arr[i].length; j++) {
       if (
         arr[i - 1][j] == arr[i][j] &&
         arr[i - 1][j] == arr[i + 1][j] &&
         arr[i][j] == arr[i + 1][j]
       ) {
-        flag = true;
-        break;
+        return true;
       }
     }
   }
 
-  for (let i = 1; i < arr.length / 2; i++) {
-    for (let j = 1; j < arr[i].length / 2; j++) {
+  for (let i = 1; i < arr.length; i++) {
+    for (let j = 1; j < arr[i].length; j++) {
       if (
         arr[i - 1][j - 1] == arr[i][j] &&
         arr[i][j] == arr[i + 1][j + 1] &&
         arr[i - 1][j - 1] == arr[i + 1][j + 1]
       ) {
-        flag = true;
-        break;
+        return true;
       } else if (
         arr[i - 1][j + 1] == arr[i][j] &&
         arr[i][j] == arr[i + 1][j - 1] &&
         arr[i - 1][j + 1] == arr[i + 1][j - 1]
       ) {
-        flag = true;
-        break;
+        return true;
       }
     }
   }
-
-  return flag;
 };
 
 while (true) {
   console.log("Player 1 :");
-  let posX1 = prompt("Enter your position (row): "),
-    posY1 = prompt("Enter your position (column): "),
-    x1 = parseInt(posX1),
-    y1 = parseInt(posY1);
+  let posX = prompt("Enter your position (row): "),
+    posY = prompt("Enter your position (column): "),
+    x = parseInt(posX),
+    y = parseInt(posY);
 
-  while ((x1 <= 0 || x1 > 3 || isNaN(x1)) || (y1 <= 0 || y1 > 3 || isNaN(y1)) ) {
+  while (isBeyond(x, y)) {
     console.log("You can't go beyond 3x3! \n");
-    (posX1 = prompt("Enter your position (row): ")),
-      (posY1 = prompt("Enter your position (column): ")),
-      (x1 = parseInt(posX1)),
-      (y1 = parseInt(posY1));
+    posX = prompt("Enter your position (row): ");
+    posY = prompt("Enter your position (column): ");
+    x = parseInt(posX);
+    y = parseInt(posY);
   }
-  if (x1 <= 3 && y1 <= 3) {
-    matrices[x1 - 1][y1 - 1] = "X";
+
+  while (isNotAvaliable(x, y)) {
+    console.log("Someone has used this exact position! \n");
+    posX = prompt("Enter your position (row): ");
+    posY = prompt("Enter your position (column): ");
+    x = parseInt(posX);
+    y = parseInt(posY);
   }
+
+  matrices[x - 1][y - 1] = "X";
+
+  console.log("\n");
 
   for (let i = 0; i < matrices.length; i++) {
     console.log(matrices[i]);
-    console.log("\n");
   }
 
-  if (win(matrices)) break;
+  console.log("\n");
+
+  if (win(matrices)) {
+    console.log("%c Player 1 won!", "color: blue; font-style: italic");
+    break;
+  }
 
   console.log("Player 2 :");
-  let posX2 = prompt("Enter your position (row): "),
-    posY2 = prompt("Enter your position (column): "),
-    x2 = parseInt(posX2),
-    y2 = parseInt(posY2);
+  posX = prompt("Enter your position (row): ");
+  posY = prompt("Enter your position (column): ");
+  x = parseInt(posX);
+  y = parseInt(posY);
 
-  while ((x2 <= 0 || x2 > 3 || isNaN(x2)) || (y2 <= 0 || y2 > 3 || isNaN(y2))) {
+  while (isBeyond(x, y)) {
     console.log("You can't go beyond 3x3! \n");
-    (posX2 = prompt("Enter your position (row): ")),
-      (posY2 = prompt("Enter your position (column): ")),
-      (x2 = parseInt(posX2)),
-      (y2 = parseInt(posY2));
+    posX = prompt("Enter your position (row): ");
+    posY = prompt("Enter your position (column): ");
+    x = parseInt(posX);
+    y = parseInt(posY);
   }
-  if (x2 <= 3 && y2 <= 3) {
-    matrices[x2 - 1][y2 - 1] = "Y";
+
+  while (isNotAvaliable(x, y)) {
+    console.log("Someone has used this exact position! \n");
+    posX = prompt("Enter your position (row): ");
+    posY = prompt("Enter your position (column): ");
+    x = parseInt(posX);
+    y = parseInt(posY);
   }
+
+  matrices[x - 1][y - 1] = "O";
+
+  console.log("\n");
 
   for (let i = 0; i < matrices.length; i++) {
     console.log(matrices[i]);
-    console.log("\n");
   }
 
-  if (win(matrices)) break;
-}
+  console.log("\n");
 
-if (win(matrices)) console.log("cihuy");
+  if (win(matrices)) {
+    console.log("%c Player 2 won!", "color: red; font-style: italic");
+    break;
+  }
+}
